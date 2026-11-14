@@ -37,6 +37,28 @@ abstract class TestCase extends BaseTestCase
         return $this->withoutHeader('Authorization');
     }
 
+    /**
+     * Gabungan izin bawaan beberapa peran, urut abjad seperti PemeriksaIzin::daftar().
+     * Uji yang membandingkan daftar izin memakai ini, bukan menulis ulang daftarnya: menambah
+     * izin pada sebuah peran tidak boleh memaksa uji domain lain ikut disunting.
+     *
+     * @return list<string>
+     */
+    protected function izinGabungan(\App\Enums\NamaPeran ...$peran): array
+    {
+        $nama = [];
+
+        foreach ($peran as $satu) {
+            foreach ($satu->izinBawaan() as $izin) {
+                $nama[$izin->value] = true;
+            }
+        }
+
+        ksort($nama);
+
+        return array_keys($nama);
+    }
+
     public function call(
         $method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null,
     ) {
