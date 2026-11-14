@@ -39,10 +39,11 @@ Berlaku sejak Sesi 4. Transaksi yang mengunci lebih dari satu baris mengambil ku
 | 1 | `pengguna`, lalu `alamat` miliknya | `BukuAlamat` |
 | 2 | `keranjang`, lalu `butir_keranjang` | `LayananCheckout` |
 | 3 | `checkout` | `GembokCheckout` |
-| 4 | `pembayaran` | `LayananPembayaran` |
+| 4 | `pembayaran`, atau `pencairan` | `LayananPembayaran`, `LayananPencairan` |
 | 5 | `pesanan` | `MesinStatusPesanan` |
 | 6 | `produk`, urut nomor menaik | `PenjagaStok` |
 | 7 | `dompet`, urut nomor menaik | `BukuBesar` |
+| 8 | `rantai_audit`, kepala rantai log audit | `PencatatAudit` |
 
 Middleware `idempoten` mencatat kuncinya sebelum anak tangga pertama. Catatan itu baris baru, dan tidak ada transaksi yang memintanya setelah memegang kunci dari tabel di atas.
 
