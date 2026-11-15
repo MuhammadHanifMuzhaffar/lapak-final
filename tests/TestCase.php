@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Enums\NamaPeran;
 use App\Models\Pengguna;
 use App\Models\Sesi;
 use App\Services\PenerbitSesi;
@@ -44,7 +45,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return list<string>
      */
-    protected function izinGabungan(\App\Enums\NamaPeran ...$peran): array
+    protected function izinGabungan(NamaPeran ...$peran): array
     {
         $nama = [];
 

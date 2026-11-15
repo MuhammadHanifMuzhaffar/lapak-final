@@ -16,4 +16,3 @@ return [
         'POST api/v1/admin/toko/{id}/tangguhkan' => 'UPDATE bersyarat: pengulangan dijawab 409.',
     ],
 ];
-

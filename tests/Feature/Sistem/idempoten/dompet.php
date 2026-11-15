@@ -11,4 +11,3 @@ return [
         'POST api/v1/webhook/pembayaran' => 'Dijaga status tagihan di bawah gembok checkout.',
     ],
 ];
-

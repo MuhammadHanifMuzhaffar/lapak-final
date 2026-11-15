@@ -14,4 +14,3 @@ return [
         'POST api/v1/alamat' => 'Tidak menyentuh uang maupun stok; jumlah alamat dibatasi.',
     ],
 ];
-

@@ -14,4 +14,3 @@ return [
         'POST api/v1/sesi/konfirmasi' => 'Kunci lama mati setelah berhasil; pengulangan dijawab 401.',
     ],
 ];
-
