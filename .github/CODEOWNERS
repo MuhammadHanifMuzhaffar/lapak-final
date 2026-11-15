@@ -81,3 +81,19 @@
 /app/Balapan/PenyesuaianStok.php              @NimatulAzizahh
 /app/Balapan/KeranjangGanda.php               @NovendraAnggoroAdjiNugroho
 /app/Balapan/WebhookGanda.php                 @KaishanAryaSetiko
+
+# Sesi 5: pintu tunggal, log audit, dan berkas rilis
+/app/Services/LayananPesanan.php              @0neNopen
+/app/Services/PenyelesaianOtomatis.php        @0neNopen
+/tests/Pendukung/                             @0neNopen
+/app/Http/Controllers/PesananTokoController.php @NimatulAzizahh
+/app/Services/LayananDana.php                 @KaishanAryaSetiko
+/app/Services/LayananPencairan.php            @KaishanAryaSetiko
+/app/Models/Pencairan.php                     @KaishanAryaSetiko
+/app/Services/PencatatAudit.php               @ZidniiAghniyaRajwa
+/app/Services/PemeriksaRantaiAudit.php        @ZidniiAghniyaRajwa
+/app/Models/LogAudit.php                      @ZidniiAghniyaRajwa
+/app/Enums/PeristiwaAudit.php                 @ZidniiAghniyaRajwa
+/docs/RILIS.md                                @ZidniiAghniyaRajwa
+/CHANGELOG.md                                 @MuhammadHanifMuzhaffar
+/app/Domain/Audit/                            @ZidniiAghniyaRajwa

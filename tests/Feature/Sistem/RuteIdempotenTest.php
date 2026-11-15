@@ -10,24 +10,22 @@ use Illuminate\Support\Facades\Route;
 | kali. Menambah rute POST karenanya menuntut satu keputusan tertulis: dijaga Idempotency-Key,
 | atau aman diulang karena sebab yang disebutkan.
 */
-const POST_BERKUNCI = [
-    'POST api/v1/checkout',
-    'POST api/v1/toko-saya/produk/{id}/stok',
-];
 
-const POST_TANPA_KUNCI = [
-    'POST api/v1/registrasi' => 'Surel unik: pengulangan dijawab 422, tidak membuat akun kedua.',
-    'POST api/v1/masuk' => 'Pengulangan hanya menerbitkan sesi tambahan yang dapat dicabut.',
-    'POST api/v1/keluar' => 'Mencabut sesi yang sudah dicabut tidak mengubah apa pun.',
-    'POST api/v1/sesi/konfirmasi' => 'Kunci lama mati setelah berhasil; pengulangan dijawab 401.',
-    'POST api/v1/simulasi-belanja' => 'Hanya menghitung, tidak menulis.',
-    'POST api/v1/toko-saya' => 'Satu pengguna satu toko (LP-3): pengulangan dijawab 409.',
-    'POST api/v1/toko-saya/produk' => 'Tidak menyentuh uang; produk kembar dapat diarsipkan.',
-    'POST api/v1/admin/toko/{id}/setujui' => 'UPDATE bersyarat: pengulangan dijawab 409.',
-    'POST api/v1/admin/toko/{id}/tangguhkan' => 'UPDATE bersyarat: pengulangan dijawab 409.',
-    'POST api/v1/alamat' => 'Tidak menyentuh uang maupun stok; jumlah alamat dibatasi.',
-    'POST api/v1/webhook/pembayaran' => 'Dijaga status tagihan di bawah gembok checkout.',
-];
+/** @return array{berkunci: list<string>, tanpa_kunci: array<string, string>} */
+function daftarPost(): array
+{
+    $gabung = ['berkunci' => [], 'tanpa_kunci' => []];
+
+    // Satu berkas per domain, seperti matriks otorisasi: PR dua domain tidak pernah menyunting
+    // berkas yang sama hanya karena sama-sama menambah rute POST.
+    foreach (glob(__DIR__.'/idempoten/*.php') as $berkas) {
+        $domain = require $berkas;
+        $gabung['berkunci'] = [...$gabung['berkunci'], ...$domain['berkunci']];
+        $gabung['tanpa_kunci'] += $domain['tanpa_kunci'];
+    }
+
+    return $gabung;
+}
 
 /** @return array<string, list<string>> "POST alamat" => middleware rute itu */
 function rutePost(): array
@@ -46,12 +44,13 @@ function rutePost(): array
 }
 
 it('mencatat setiap rute POST pada tepat satu daftar', function () {
-    $tercatat = [...POST_BERKUNCI, ...array_keys(POST_TANPA_KUNCI)];
+    $klasifikasi = daftarPost();
+    $tercatat = [...$klasifikasi['berkunci'], ...array_keys($klasifikasi['tanpa_kunci'])];
     $rute = array_keys(rutePost());
 
     $belum = array_values(array_diff($rute, $tercatat));
     $usang = array_values(array_diff($tercatat, $rute));
-    $ganda = array_values(array_intersect(POST_BERKUNCI, array_keys(POST_TANPA_KUNCI)));
+    $ganda = array_values(array_intersect($klasifikasi['berkunci'], array_keys($klasifikasi['tanpa_kunci'])));
 
     expect($belum)->toBeEmpty('Rute POST belum diklasifikasi: '.implode(', ', $belum))
         ->and($usang)->toBeEmpty('Tercatat tetapi rutenya tidak ada: '.implode(', ', $usang))
@@ -59,9 +58,10 @@ it('mencatat setiap rute POST pada tepat satu daftar', function () {
 });
 
 it('memasang idempoten pada setiap rute berkunci, di belakang kunci sesi', function () {
+    $klasifikasi = daftarPost();
     $salah = [];
 
-    foreach (POST_BERKUNCI as $nama) {
+    foreach ($klasifikasi['berkunci'] as $nama) {
         $middleware = rutePost()[$nama] ?? [];
         $auth = array_search('auth:sesi', $middleware, true);
         $idempoten = array_search('idempoten', $middleware, true);
@@ -76,8 +76,9 @@ it('memasang idempoten pada setiap rute berkunci, di belakang kunci sesi', funct
 });
 
 it('tidak memasang idempoten pada rute yang dinyatakan tidak memerlukannya', function () {
+    $klasifikasi = daftarPost();
     $salah = array_keys(array_filter(
-        array_intersect_key(rutePost(), POST_TANPA_KUNCI),
+        array_intersect_key(rutePost(), $klasifikasi['tanpa_kunci']),
         fn (array $middleware) => in_array('idempoten', $middleware, true),
     ));
 
@@ -85,7 +86,8 @@ it('tidak memasang idempoten pada rute yang dinyatakan tidak memerlukannya', fun
 });
 
 it('menuliskan alasan untuk setiap rute tanpa kunci', function () {
-    foreach (POST_TANPA_KUNCI as $nama => $alasan) {
+    $klasifikasi = daftarPost();
+    foreach ($klasifikasi['tanpa_kunci'] as $nama => $alasan) {
         expect(mb_strlen($alasan))->toBeGreaterThan(20, "Alasan {$nama} terlalu singkat.");
     }
 });
