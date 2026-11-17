@@ -6,6 +6,7 @@ namespace App\Console\Commands;
 
 use App\Balapan\SkenarioBalapan;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
@@ -31,6 +32,12 @@ final class Balapan extends Command
 
     public function handle(): int
     {
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            $this->error('Uji balapan membutuhkan MySQL: SQLite tidak mengenal SELECT ... FOR UPDATE.');
+
+            return self::FAILURE;
+        }
+
         if (app()->isProduction()) {
             $this->error('Uji balapan dilarang di lingkungan produksi.');
 
@@ -46,6 +53,7 @@ final class Balapan extends Command
                 'webhook-ganda',
                 'kunci-ganda',
                 'batal-saat-checkout',
+                'audit-serempak',
             ];
             $semuaLulus = true;
             foreach ($daftar as $s) {
