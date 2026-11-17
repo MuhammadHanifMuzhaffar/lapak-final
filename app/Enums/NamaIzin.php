@@ -18,6 +18,7 @@ enum NamaIzin: string
     case TokoModerasi = 'toko.moderasi';
     case PeranKelola = 'peran.kelola';
     case BukuBesarLihat = 'buku-besar.lihat';
+    case AuditLihat = 'audit.lihat';
 
     public function keterangan(): string
     {
@@ -30,6 +31,7 @@ enum NamaIzin: string
             self::TokoModerasi => 'Menyetujui dan menangguhkan toko',
             self::PeranKelola => 'Memberi dan mencabut peran pengguna',
             self::BukuBesarLihat => 'Membaca seluruh dompet dan mutasi marketplace',
+            self::AuditLihat => 'Membaca seluruh catatan rantai audit marketplace',
         };
     }
 }

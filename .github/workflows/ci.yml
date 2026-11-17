@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB_CONNECTION: sqlite
+      GATEWAY_RAHASIA: kunci-rahasia-gateway-2026-ci-ok
     steps:
       - uses: actions/checkout@v4
 
@@ -38,6 +39,9 @@ jobs:
 
       - name: Buku besar seimbang
         run: php artisan lapak:periksa-buku
+
+      - name: Verifikasi rantai audit
+        run: php artisan lapak:verifikasi-audit
 
       - name: Pengujian
         run: php vendor/bin/pest --ci
@@ -68,6 +72,7 @@ jobs:
       DB_DATABASE: lapak
       DB_USERNAME: root
       DB_PASSWORD: rahasia-ci
+      GATEWAY_RAHASIA: kunci-rahasia-gateway-2026-ci-ok
     steps:
       - uses: actions/checkout@v4
 
@@ -97,3 +102,6 @@ jobs:
 
       - name: Buku besar seimbang setelah balapan
         run: php artisan lapak:periksa-buku
+
+      - name: Verifikasi rantai audit
+        run: php artisan lapak:verifikasi-audit

@@ -41,7 +41,7 @@ return [
         'alamat_maksimum' => 5,
     ],
     'gateway' => [
-        'rahasia' => env('GATEWAY_RAHASIA', 'kunci-rahasia-gateway-2026'),
+        'rahasia' => env('GATEWAY_RAHASIA'),
         'toleransi_detik' => 300,
     ],
 ];
