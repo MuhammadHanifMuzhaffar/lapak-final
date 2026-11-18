@@ -9,4 +9,6 @@ return [
     'POST api/v1/checkout' => ['pembeli'],
     'GET api/v1/pesanan' => ['pembeli'],
     'GET api/v1/pesanan/{nomor}' => ['pembeli'],
+    'POST api/v1/pesanan/{nomor}/terima' => ['pembeli'],
+    'POST api/v1/pesanan/{nomor}/batal' => ['pembeli'],
 ];
