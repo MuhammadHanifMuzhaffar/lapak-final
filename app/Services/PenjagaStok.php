@@ -16,6 +16,10 @@ final class PenjagaStok
 {
     public const MAKSIMUM = 100_000;
 
+    public function __construct(
+        private readonly PencatatStok $catat,
+    ) {}
+
     /**
      * @param  list<int>  $idProduk
      * @return Collection<int, Produk>
@@ -35,7 +39,7 @@ final class PenjagaStok
             ->keyBy('id');
     }
 
-    public function kurangi(Produk $produk, int $kuantitas): void
+    public function kurangi(Produk $produk, int $kuantitas, ?string $rujukan = null): void
     {
         if ($kuantitas < 1) {
             throw new InvalidArgumentException('Kuantitas minimal 1.');
@@ -49,6 +53,8 @@ final class PenjagaStok
 
         $produk->stok -= $kuantitas;
         $produk->save();
+
+        $this->catat->catat($produk, 'keluar', -$kuantitas, $produk->stok, $rujukan);
     }
 
     public function kembalikan(int $idProduk, int $kuantitas, ?string $rujukan = null): void
@@ -57,16 +63,22 @@ final class PenjagaStok
             throw new InvalidArgumentException('Kuantitas minimal 1.');
         }
 
-        Produk::query()->whereKey($idProduk)->increment('stok', $kuantitas);
+        DB::transaction(function () use ($idProduk, $kuantitas, $rujukan): void {
+            $produk = Produk::query()->lockForUpdate()->findOrFail($idProduk);
+            $produk->stok += $kuantitas;
+            $produk->save();
+
+            $this->catat->catat($produk, 'masuk', $kuantitas, $produk->stok, $rujukan);
+        });
     }
 
-    public function sesuaikan(int $idProduk, int $selisih): Produk
+    public function sesuaikan(int $idProduk, int $selisih, ?string $rujukan = null): Produk
     {
         if ($selisih === 0) {
             throw new InvalidArgumentException('Selisih tidak boleh nol.');
         }
 
-        return DB::transaction(function () use ($idProduk, $selisih): Produk {
+        return DB::transaction(function () use ($idProduk, $selisih, $rujukan): Produk {
             $produk = Produk::query()->lockForUpdate()->findOrFail($idProduk);
             $baru = $produk->stok + $selisih;
 
@@ -84,6 +96,8 @@ final class PenjagaStok
 
             $produk->stok = $baru;
             $produk->save();
+
+            $this->catat->catat($produk, 'penyesuaian', $selisih, $produk->stok, $rujukan);
 
             return $produk;
         });
