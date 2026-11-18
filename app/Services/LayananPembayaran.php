@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
  * buat() dan tandaiKedaluwarsa() dipanggil dari dalam transaksi pemanggil; terima() membuka
  * GembokCheckout sendiri.
  */
-final class LayananPembayaran
+class LayananPembayaran
 {
     public function __construct(
         private readonly GembokCheckout $gembok,
