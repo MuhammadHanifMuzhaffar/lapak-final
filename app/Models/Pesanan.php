@@ -33,6 +33,8 @@ final class Pesanan extends Model
             'alamat_kirim' => 'array',
             'dibayar_pada' => 'datetime',
             'dibatalkan_pada' => 'datetime',
+            'dana_dilepas_pada' => 'datetime',
+            'dana_dikembalikan_pada' => 'datetime',
         ];
     }
 

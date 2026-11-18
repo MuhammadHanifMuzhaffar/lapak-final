@@ -10,7 +10,7 @@ class DompetSeeder extends Seeder
 {
     public function run(BukuBesar $buku): void
     {
-        foreach ([JenisDompet::Eksternal, JenisDompet::Escrow, JenisDompet::Pendapatan] as $jenis) {
+        foreach ([JenisDompet::Eksternal, JenisDompet::Escrow, JenisDompet::Pendapatan, JenisDompet::Pencairan] as $jenis) {
             $buku->dompetSistem($jenis);
         }
     }

@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Domain\Pesanan\StatusPesanan;
 use App\Enums\JenisDompet;
 use App\Models\Dompet;
 use App\Models\MutasiSaldo;
+use App\Models\MutasiStok;
+use App\Models\Pencairan;
+use App\Models\Pesanan;
+use App\Models\Produk;
 use Illuminate\Console\Command;
 
 final class PeriksaBuku extends Command
 {
     protected $signature = 'lapak:periksa-buku';
 
-    protected $description = 'Memeriksa empat invarian buku besar (LP-13); kode keluar 1 bila dilanggar.';
+    protected $description = 'Memeriksa tujuh invarian buku besar (LP-13); kode keluar 1 bila dilanggar.';
 
     public function handle(): int
     {
@@ -55,6 +60,37 @@ final class PeriksaBuku extends Command
         }
 
         $this->table(['Dompet', 'Jenis', 'Saldo (Rp)'], $baris);
+
+        // 5. Escrow = jumlah pesanan yang dananya masih ditahan.
+        $escrow = (int) Dompet::query()->where('jenis', JenisDompet::Escrow->value)->sum('saldo_rupiah');
+        $ditahan = (int) Pesanan::query()
+            ->whereIn('status', [StatusPesanan::Dibayar, StatusPesanan::Dikemas, StatusPesanan::Dikirim])
+            ->sum('total_rupiah');
+        if ($escrow !== $ditahan) {
+            $pelanggaran[] = "Escrow {$escrow} tidak sama dengan pesanan ditahan {$ditahan}.";
+        }
+
+        // 6. Dompet pencairan = jumlah pencairan yang menunggu.
+        $tahan = (int) Dompet::query()->where('jenis', JenisDompet::Pencairan->value)->sum('saldo_rupiah');
+        $menunggu = (int) Pencairan::query()->where('status', 'menunggu')->sum('jumlah_rupiah');
+        if ($tahan !== $menunggu) {
+            $pelanggaran[] = "Dompet pencairan {$tahan} tidak sama dengan pencairan menunggu {$menunggu}.";
+        }
+
+        // 7. Jejak stok berantai dan berakhir di stok produk.
+        foreach (Produk::query()->orderBy('id')->cursor() as $produk) {
+            $sebelum = null;
+            foreach (MutasiStok::query()->where('produk_id', $produk->id)->orderBy('id')->cursor() as $baris) {
+                if ($sebelum !== null && $baris->stok_setelah !== $sebelum + $baris->jumlah) {
+                    $pelanggaran[] = "Jejak stok {$produk->id} tidak berantai pada mutasi {$baris->id}.";
+                    break;
+                }
+                $sebelum = $baris->stok_setelah;
+            }
+            if ($sebelum !== null && $sebelum !== $produk->stok) {
+                $pelanggaran[] = "Stok {$produk->id} tercatat {$produk->stok}, jejak berakhir {$sebelum}.";
+            }
+        }
 
         if ($pelanggaran !== []) {
             foreach ($pelanggaran as $pesan) {
