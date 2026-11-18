@@ -24,6 +24,12 @@ class PenggunaSeeder extends Seeder
 
     public function run(PengelolaPeran $peran): void
     {
+        if (app()->isProduction()) {
+            $this->command?->warn('PenggunaSeeder dilewati: akun contoh tidak dibuat di produksi.');
+
+            return;
+        }
+
         $dibuat = [];
 
         foreach (self::AKUN as [$nama, $surel]) {

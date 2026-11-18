@@ -26,7 +26,7 @@ it('mencabut hanya sesi yang sedang dipakai saat keluar', function () {
 
     $this->sebagai($this->sri)->postJson('/api/v1/keluar')->assertOk();
 
-    $this->getJson('/api/v1/saya')->assertUnauthorized();
+    $this->tanpaKunci()->getJson('/api/v1/saya')->assertUnauthorized();
     $this->denganKunci($kunciPonsel)->getJson('/api/v1/saya')->assertOk();
 });
 

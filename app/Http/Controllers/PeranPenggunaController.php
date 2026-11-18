@@ -49,7 +49,7 @@ final class PeranPenggunaController extends Controller
         $peranEnum = NamaPeran::from($peran);
 
         $this->tegakkanAturan($request->user(), $sasaran, $peranEnum);
-        $this->pengelola->cabut($sasaran, $peranEnum);
+        $this->pengelola->cabut($sasaran, $peranEnum, oleh: $request->user());
 
         return $this->sukses(PenggunaResource::make($sasaran->fresh('peran')));
     }
