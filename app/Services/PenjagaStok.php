@@ -51,7 +51,7 @@ final class PenjagaStok
         $produk->save();
     }
 
-    public function kembalikan(int $idProduk, int $kuantitas): void
+    public function kembalikan(int $idProduk, int $kuantitas, ?string $rujukan = null): void
     {
         if ($kuantitas < 1) {
             throw new InvalidArgumentException('Kuantitas minimal 1.');

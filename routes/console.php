@@ -11,3 +11,5 @@ Artisan::command('inspire', function () {
 Schedule::command('lapak:pangkas-sesi')->dailyAt('03:15');
 
 Schedule::command('lapak:batalkan-kedaluwarsa')->everyMinute();
+
+Schedule::command('lapak:selesaikan-pesanan')->dailyAt('02:30')->withoutOverlapping();

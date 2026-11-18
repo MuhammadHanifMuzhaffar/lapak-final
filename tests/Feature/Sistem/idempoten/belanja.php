@@ -12,5 +12,7 @@ return [
     'tanpa_kunci' => [
         'POST api/v1/simulasi-belanja' => 'Hanya menghitung, tidak menulis.',
         'POST api/v1/alamat' => 'Tidak menyentuh uang maupun stok; jumlah alamat dibatasi.',
+        'POST api/v1/pesanan/{nomor}/terima' => 'Idempoten lewat status akhir dan penjagaan dana_dilepas_pada.',
+        'POST api/v1/pesanan/{nomor}/batal' => 'Idempoten lewat status akhir pesanan.',
     ],
 ];

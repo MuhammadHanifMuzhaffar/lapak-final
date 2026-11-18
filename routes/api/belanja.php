@@ -34,4 +34,8 @@ Route::middleware(['auth:sesi', 'izin:pesanan.buat'])->group(function (): void {
     // Sengaja tanpa pola pada {nomor}: alamat yang bentuknya salah tetap melewati kunci sesi dan
     // izin lebih dulu, lalu dijawab 404 oleh kueri berlingkup, sama seperti nomor orang lain.
     Route::get('pesanan/{nomor}', [PesananSayaController::class, 'show'])->name('pesanan.show');
+    Route::post('pesanan/{nomor}/terima', [PesananSayaController::class, 'terima'])
+        ->middleware('sesi.segar')->name('pesanan.terima');
+    Route::post('pesanan/{nomor}/batal', [PesananSayaController::class, 'batal'])
+        ->middleware('sesi.segar')->name('pesanan.batal');
 });

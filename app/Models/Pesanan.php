@@ -32,6 +32,9 @@ final class Pesanan extends Model
             'total_rupiah' => 'integer',
             'alamat_kirim' => 'array',
             'dibayar_pada' => 'datetime',
+            'dikemas_pada' => 'datetime',
+            'dikirim_pada' => 'datetime',
+            'selesai_pada' => 'datetime',
             'dibatalkan_pada' => 'datetime',
             'dana_dilepas_pada' => 'datetime',
             'dana_dikembalikan_pada' => 'datetime',
@@ -75,5 +78,15 @@ final class Pesanan extends Model
     public function scopeMilikPembeli(Builder $kueri, Pengguna $pembeli): void
     {
         $kueri->where('pesanan.pembeli_id', $pembeli->id);
+    }
+
+    /**
+     * Pintu penjual selalu berangkat dari scope ini. Nomor pesanan milik toko orang lain dijawab 404.
+     *
+     * @param  Builder<Pesanan>  $kueri
+     */
+    public function scopeMilikPenjual(Builder $kueri, Pengguna $penjual): void
+    {
+        $kueri->whereHas('toko', fn (Builder $toko) => $toko->where('pemilik_id', $penjual->id));
     }
 }
