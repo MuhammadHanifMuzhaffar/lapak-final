@@ -17,9 +17,9 @@
 | PR | Domain | Cabang | Penulis | Isi / Fitur | Dual Reviewer | Status |
 |:---:|:---:|:---|:---:|:---|:---:|:---:|
 | 47 | Pembuka | `sesi-5/pembuka-sekar` | Zidnii | Papan sesi 5, daftar periksa rilis, refactor berkas bersama | Hanif, Azizah | Merged |
-| 48 | D5 (Audit & Kualitas) | `sesi-5/rantai-audit-sekar` | Zidnii | Tabel log audit, rantai hash SHA-256, PencatatAudit, lapak:verifikasi-audit, GET /audit, balapan serempak | Hanif, Azizah | Review |
-| 49 | D1 (Identitas & Sesi) | `sesi-5/jejak-identitas-bambang` | Hanif | Deteksi kunci sesi revoked, jejak masuk/keluar/peran, penjaga seeder produksi | Azizah, Novendra | Menunggu |
-| 50 | D4 (Dana & Dompet) | `sesi-5/pencairan-dimas` | Kaishan | Pelepasan escrow komisi 5%, pencairan dua orang, invarian 5-7, uji webhook | Zidnii, Hanif | Menunggu |
-| 51 | D3 (Pesanan & Belanja) | `sesi-5/tindakan-pembeli-rani` | Novendra | LayananPesanan satu pintu, terima/batal, penyelesaian otomatis, 6 uji checkout | Kaishan, Zidnii | Menunggu |
-| 52 | D2 (Toko & Katalog) | `sesi-5/pesanan-toko-bagas` | Azizah | Izin pesanan.proses, 5 rute pesanan toko, 404 cross-shop, append-only mutasi_stok | Novendra, Kaishan | Menunggu |
-| - | Rilis & Tag | `main` | Zidnii | Verifikasi klon baru, versi 1.0.0, tag ganda `sesi-5` dan `v1.0.0` | Semua | Menunggu |
+| 48 | D5 (Audit & Kualitas) | `sesi-5/rantai-audit-sekar` | Zidnii | Tabel log audit, rantai hash SHA-256, PencatatAudit, lapak:verifikasi-audit, GET /audit, balapan serempak | Hanif, Azizah | Merged |
+| 49 | D1 (Identitas & Sesi) | `sesi-5/jejak-identitas-bambang` | Hanif | Deteksi kunci sesi revoked, jejak masuk/keluar/peran, penjaga seeder produksi | Azizah, Novendra | Merged |
+| 50 | D4 (Dana & Dompet) | `sesi-5/pencairan-dimas` | Kaishan | Pelepasan escrow komisi 5%, pencairan dua orang, invarian 5-7, uji webhook | Zidnii, Hanif | Merged |
+| 51 | D3 (Pesanan & Belanja) | `sesi-5/tindakan-pembeli-rani` | Novendra | LayananPesanan satu pintu, terima/batal, penyelesaian otomatis, 6 uji checkout | Kaishan, Zidnii | Merged |
+| 52 | D2 (Toko & Katalog) | `sesi-5/pesanan-toko-bagas` | Azizah | Izin pesanan.proses, 5 rute pesanan toko, 404 cross-shop, append-only mutasi_stok | Novendra, Kaishan | Merged |
+| - | Rilis & Tag | `main` | Zidnii | Verifikasi klon baru, versi 1.0.0, tag ganda `sesi-5` dan `v1.0.0` | Semua | Selesai |

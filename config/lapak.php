@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'versi' => '0.1.0',
+    'versi' => '1.0.0',
 
     'komisi_persen' => (int) env('LAPAK_KOMISI_PERSEN', 5),
     'batas_bayar_jam' => (int) env('LAPAK_BATAS_BAYAR_JAM', 24),
