@@ -7,7 +7,6 @@ use App\Enums\JenisDompet;
 use App\Enums\JenisMutasi;
 use App\Exceptions\GalatDomain;
 use App\Exceptions\SaldoTidakCukup;
-use App\Models\Pencairan;
 use App\Models\Pengguna;
 use App\Services\BukuBesar;
 use App\Services\LayananPencairan;

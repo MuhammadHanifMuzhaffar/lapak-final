@@ -6,7 +6,6 @@ use App\Domain\Pesanan\StatusPesanan;
 use App\Enums\JenisDompet;
 use App\Enums\StatusPembayaran;
 use App\Models\Checkout;
-use App\Models\Pembayaran;
 use App\Models\Pesanan;
 use App\Models\Toko;
 use App\Services\BukuBesar;
