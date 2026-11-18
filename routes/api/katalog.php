@@ -2,12 +2,29 @@
 
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\ModerasiTokoController;
+use App\Http\Controllers\PesananTokoController;
 use App\Http\Controllers\ProdukSayaController;
 use App\Http\Controllers\TokoSayaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('produk', [KatalogController::class, 'index'])->name('produk.index');
 Route::get('produk/{slug}', [KatalogController::class, 'show'])->name('produk.show');
+
+Route::middleware(['auth:sesi', 'izin:pesanan.proses'])
+    ->prefix('toko/pesanan')
+    ->name('toko.pesanan.')
+    ->whereNumber('pesanan')
+    ->group(function (): void {
+        Route::get('/', [PesananTokoController::class, 'index'])->name('index');
+        Route::get('{pesanan}', [PesananTokoController::class, 'show'])->name('show');
+        Route::get('{pesanan}/riwayat', [PesananTokoController::class, 'riwayat'])->name('riwayat');
+
+        Route::middleware('sesi.segar')->group(function (): void {
+            Route::post('{pesanan}/proses', [PesananTokoController::class, 'proses'])->name('proses');
+            Route::post('{pesanan}/kirim', [PesananTokoController::class, 'kirim'])->name('kirim');
+        });
+    });
+
 Route::get('toko/{slug}', [KatalogController::class, 'toko'])->name('toko.show');
 
 Route::middleware('auth:sesi')
