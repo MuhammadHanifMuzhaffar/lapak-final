@@ -40,6 +40,11 @@ class Toko extends Model
         return $this->belongsTo(Pengguna::class, 'pemilik_id');
     }
 
+    public function penjual(): BelongsTo
+    {
+        return $this->pemilik();
+    }
+
     public function pemoderasi(): BelongsTo
     {
         return $this->belongsTo(Pengguna::class, 'dimoderasi_oleh');
